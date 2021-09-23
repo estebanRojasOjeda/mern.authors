@@ -1,36 +1,41 @@
+import { Table, Button } from 'reactstrap';
+import Swal from 'sweetalert2';
+import { BsFillReplyAllFill, BsFillTrashFill } from "react-icons/bs";
+import { useEffect, useState } from 'react';
+import axios from "axios";
 
-import { Table } from 'reactstrap';
+const View = () => {
+    const [authorItem, setAuthorItem] = useState([]);
+    useEffect(() => {
+        axios.get('http://localhost:8000/api/authors/all')
+            .then(res => {
+                console.log(res.data.authors);
+                setAuthorItem(res.data.authors);
+                console.log(authorItem)
+            })
+            .catch(err => Swal.fire('Error getting products', 'Error getting the products list', 'error'));
+    }, [])
 
-const View = (props) => {
     return (
         <Table striped>
             <thead>
                 <tr>
-                    <th>#</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Username</th>
+                    <th>Id</th>
+                    <th>Nombre Autor</th>
+                    <th colSpan={'2'}>Acciones</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                </tr>
+
+                {authorItem.length > 0 && authorItem.map((p, i) => {
+                    return (<tr key={i}>
+                        <th>{p._id}</th>
+                        <td>{p.name}</td>
+                        <td><Button color="primary"><BsFillReplyAllFill></BsFillReplyAllFill></Button></td>
+                        <td><Button color="danger"><BsFillTrashFill></BsFillTrashFill></Button></td>
+                    </tr>);
+                })
+                }
             </tbody>
         </Table>
     )
