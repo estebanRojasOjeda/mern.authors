@@ -18,3 +18,13 @@ module.exports.findAuthorById = (req, res) => {
         .catch(err => res.json({ message: "Error trying to find author by id", error: err }))
 }
 
+module.exports.updateAuthor = (req, res) => {
+    Author.updateOne({ _id: req.params.id })
+        .then(resUpdate => res.json({ resUpdate: resUpdate }))
+        .catch(err => res.json({ message: "Error trying to update author", error: err }))
+}
+
+module.exports.deleteAuthor = (req, res) => {
+    Author.deleteOne({ _id: req.params.id })
+    then(resDelete => res.json({ resDelete: resDelete }))
+}
